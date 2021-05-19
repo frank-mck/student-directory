@@ -25,9 +25,8 @@ end
 
 def print(students)
   @i = 0
-  filtered_students = students.reject { |some| some[:name].chr != @letter }
-  filtered_students = filtered_students.reject { |student| student[:name].length >= 12 }
-    
+  filtered_students = students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
+ 
   puts "Showing all students that begin with the letter #{@letter}"
     
   until @i >= filtered_students.length

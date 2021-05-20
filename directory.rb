@@ -5,11 +5,10 @@
 def input_students
   puts "Please enter the name of the students, hobbies, cohort, ect.".center(100)
   puts "To finish, just hit enter twice".center(100)
-  name = gets.strip
+  name = STDIN.gets.chomp
   # ask unitl name is empty
   while !name.empty? do
     puts "Please enter students cohort month".center(100)
-  
     while true do
       cohort = gets.strip
       cohort = "november" if cohort.empty?
@@ -113,14 +112,15 @@ def print_footer
   end
 end
 
-def interactive_menu
-  loop do
+def print_menu
     puts "1. Input the students"
     puts "2. Show the students"
     puts "3. Show students by specfic letter"
     puts "4. Show students by cohort"
     puts "9. exit"
-    selection = gets.chomp
+end
+
+def process(selection)
     case selection
     when "1"
         input_students
@@ -138,6 +138,12 @@ def interactive_menu
     else
         puts "I don't know what you mean, try again"
     end
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(gets.chomp)
   end
 end
       

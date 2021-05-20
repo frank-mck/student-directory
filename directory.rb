@@ -1,11 +1,14 @@
+@students = []
+@cohort_list = [:january, :february, :march, :april, :june,
+:july, :august, :september, :october, :november, :december]
+                 
 def input_students
-  students = []
   puts "Please enter the name of the students, hobbies, cohort, ect.".center(100)
   puts "To finish, just hit enter twice".center(100)
   name = gets.strip
-  
+  # ask unitl name is empty
   while !name.empty? do
-    puts "Please enter students cohort".center(100)
+    puts "Please enter students cohort month".center(100)
   
     while true do
       cohort = gets.strip
@@ -27,80 +30,81 @@ def input_students
   
   puts "Please enter students country of birth".center(100)
   country_of_birth = gets.strip
-  students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
+  # add input to student array
+  @students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
     
-    if students.length <= 1
-      puts "Now we have #{students.count} student".center(100)
-    else
-      puts "Now we have #{students.count} students".center(100)
-    end
-   
-    name = gets.strip
+  
+  if @students.length <= 1 
+    puts "Now we have #{@students.count} student".center(100)
+  else
+    puts "Now we have #{@students.count} students".center(100)
   end
-  students
+   
+  name = gets.strip
+  end
+  # add a default value for cohort if invalid input or typo
+  @students = @students.each {|cohort| [cohort[:cohort]].include?([@cohort_list]) ? cohort[:cohort] : cohort[:cohort] = :november }
+  @students
 end
 
-def print_cohorts(students)
-  cohort_list = [:january, :february, :march, :april, :june,
-                 :july, :august, :september, :october, :november, :december]
+def print_cohorts
   grouped_cohorts = Hash.new()
   
-  students.each do |student|
-    month = cohort_list.find_index(student[:cohort])
-    if cohort_list[month] == student[:cohort]
-      cohort_month = student[:cohort]
-      if grouped_cohorts[cohort_month] == nil
-        grouped_cohorts[cohort_month] = []
+  @students.each do |student|
+    month = @cohort_list.find_index(student[:cohort])
+    if @cohort_list[month] == student[:cohort]
+      @cohort_month = student[:cohort]
+      if grouped_cohorts[@cohort_month] == nil
+        grouped_cohorts[@cohort_month] = []
       end
            
-      grouped_cohorts[cohort_month].push(student[:name])
+      grouped_cohorts[@cohort_month].push(student[:name])
     end
-    puts "All students in the #{cohort_month} cohort: ".center(100)
-    puts grouped_cohorts[cohort_month].join("").center(100)
     end
+  puts "All students in the #{@cohort_month} cohort: ".center(100)
+  puts grouped_cohorts[@cohort_month].join("").center(100)
 end
 
 def print_header
-  puts "Would you like to see a list of students starting with a specific letter? Enter Y/N".center(100)
-  while true do
-    @letter = gets.chomp
-    if @letter == "Y"
-      puts "Please enter a letter to see all students begining with that letter".center(100)
-      @letter = gets.chomp
-      puts "Showing all students that begin with #{@letter}".center(100)
-      break
-    elsif @letter == "N"
-      break
-    end
-  end
   puts "The students of Villains Academy".center(100)
   puts "-------------".center(100)
 end
 
-def print(students)
+def print_
   @i = 0
-  
-  if @letter == "Y"
-    filtered_students = students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
-    puts "Showing all students that begin with the letter #{@letter}".center(100)
-    until @i >= filtered_students.length
-      student = filtered_students[@i]
-      puts "#{@i + 1}. #{student[:name]} (#{student[:cohort]} cohort, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100)
-      @i += 1
-    end
-  else
-    all_students = students.reject { |name| name[:name].length >= 12 }
-      
-    until @i >= all_students.length
-      group1 = all_students[@i]
-      puts "#{@i + 1}. #{group1[:name]} (#{group1[:cohort]} cohort, hobbies: #{group1[:hobbies]}, country: #{group1[:country_of_birth]})".center(100)
+  if
+    @students.reject { |name| name[:name].length >= 12 }
+    until @i >= @students.length
+      group1 = @students[@i]
+      puts "#{@i + 1}. #{group1[:name]} (cohort: #{group1[:cohort]}, hobbies: #{group1[:hobbies]}, country: #{group1[:country_of_birth]})".center(100)
       @i += 1
     end
   end
 end
 
-def print_footer(names)
-  if names.length <= 1
+def print_by_letter
+  @i = 0
+    puts "Please enter a letter to see all students begining with that letter".center(100)
+    @letter = gets.chomp
+ 
+    @students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
+    puts "Showing all students that begin with the letter #{@letter}".center(100)
+    
+    @students.map do |initials|
+      if initials[:name].chr != @letter
+        puts "No students found with the letter #{@letter}".center(100)
+      else
+        until @i >= @students.length
+          student = @students[@i]
+          puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100)
+          @i += 1
+        end
+      end
+    end
+end
+
+def print_footer
+  if @students.length <= 1
     puts "Overall, we have #{@i} great student".center(100)
     puts "-------------".center(100)
   else
@@ -110,24 +114,29 @@ def print_footer(names)
 end
 
 def interactive_menu
-  students = []
   loop do
     puts "1. Input the students"
     puts "2. Show the students"
+    puts "3. Show students by specfic letter"
+    puts "4. Show students by cohort"
     puts "9. exit"
     selection = gets.chomp
     case selection
     when "1"
-      students = input_students
+        input_students
     when "2"
       print_header
-      print(students)
-      print_footer(students)
-      print_cohorts(students)
+      print_
+      print_footer
+    when "3"
+      print_by_letter
+      print_footer
+      when "4"
+      print_cohorts
     when "9"
       exit
     else
-        puts "I don't know what you mena, try again"
+        puts "I don't know what you mean, try again"
     end
   end
 end

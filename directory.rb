@@ -1,97 +1,96 @@
 def input_students
-  puts "Please enter the name of the students and cohort"
-  puts "To finish, just hit enter 3 times"
-  # Create an empty array
   students = []
-  # get the first name
+  puts "Please enter the name of the students and cohort".center(50)
+  puts "To finish, just hit enter 3 times".center(50)
   name = gets.strip
-  # ask students which cohort
-  puts "Please enter students cohort"
+  
+  puts "Please enter students cohort".center(50)
   cohort = gets.strip
-  #Default value is given if not
   cohort = "november" if cohort.empty?
-  #ask for students hobbies
-  puts "Please enter students hobbies"
+  
+  puts "Please enter students hobbies".center(50)
   hobbies = gets.strip
-  #ask for students country
-  puts "Please enter students country of birth"
+  
+  puts "Please enter students country of birth".center(50)
   country_of_birth = gets.strip
   
-  #while name is not empty, repeat this code.
   while !name.empty? do
     students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
    if students.length <= 1
-       puts "Now we have #{students.count} student"
+       puts "Now we have #{students.count} student".center(50)
    else
-       puts "Now we have #{students.count} students"
+       puts "Now we have #{students.count} students".center(50)
    end
-    # get another name from the user
     name = gets.strip
-    # if we have been given a name, ask students for hobbies, country ect, again
+    
     if !name.empty?
-      puts "Please enter students cohort"
+      puts "Please enter students cohort".center(50)
       cohort = gets.strip
-      # get another hobbies from the user
-      puts "Please enter students hobbies"
+      puts "Please enter students hobbies".center(50)
       hobbies = gets.strip
-      # enter another coutry of birth from the user
-      puts "Please enter students country of birth"
+      puts "Please enter students country of birth".center(50)
       country_of_birth = gets.strip
     end
   end
-  # return the array of students
   students
 end
 
 def cohorts(students)
-#     cohort_list = ["january", "february", "march", "april", "june", "july", "august", "september", "october", "november", "december"]
-#   i = 0
-   
-#   while i < students.length
-#   names = students.map { |name| name[:name] }
-#   cohorts = students.map { |cohort| cohort[:cohort] }
-   
-   students.sort_by! { |cohort| cohort[:cohort] }
-#   group = []
-   
-#   while i < cohort_list.length do
-#       name = students[i][:name]
-#       cohort = students[i][:cohort]
-#       group << {"All students in #{cohort} cohort: #{name}"}
-       
-#       i += 1
-#   end
-#   group
+     cohort_list =  
+       {
+        "january" => [], "february": [], "march": [], "april": [], "june": [],
+       "july": [], "august": [], "september": [], "october": [], "november": [], "december": [] 
+       }
+
+students.map { |student| cohort_list[student[:cohort]] = student[:name] }
+puts cohort_list
+
 end
 
 def print_header
-  puts "Enter a letter to show all students that begin with that letter"
-  @letter = gets.chomp
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "Would you like to see a list of students starting with a specific letter? Enter Y/N".center(50)
+  
+  while true do
+    @letter = gets.chomp
+    if @letter == "Y"
+      puts "Please enter a letter to see all students begining with that letter".center(50)
+      @letter = gets.chomp
+      break
+    elsif @letter == "N"
+      break
+    end
+  end
+  puts "The students of Villains Academy".center(50)
+  puts "-------------".center(50)
 end
 
 def print(students)
   @i = 0
-  filtered_students = students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
   
-  puts "Showing all students that begin with the letter #{@letter}"
-    
-  until @i >= filtered_students.length
-    student = filtered_students[@i]
-    
-    cohort = "november" if cohort.nil?
-    
-    puts "#{@i + 1}. #{student[:name]} (#{student[:cohort]} cohort, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})"
-    @i += 1
+  if @letter == "Y"
+    filtered_students = students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
+    puts "Showing all students that begin with the letter #{@letter}".center(50)
+    until @i >= filtered_students.length
+      student = filtered_students[@i]
+      puts "#{@i + 1}. #{student[:name]} (#{student[:cohort]} cohort, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(50)
+      @i += 1
+    end
+  else
+    all_students = students.reject { |name| name[:name].length >= 12 }
+      
+    until @i >= all_students.length
+      group1 = all_students[@i]
+      puts "#{@i + 1}. #{group1[:name]} (#{group1[:cohort]} cohort, hobbies: #{group1[:hobbies]}, country: #{group1[:country_of_birth]})".center(50)
+      @i += 1
+    end
   end
 end
 
 def print_footer(names)
   if names.length <= 1
-    puts "Overall, we have #{@i} great student"
+    puts "Overall, we have #{@i} great student".center(50)
   else
-    puts "Overall, we have #{@i} great students"
+    puts "Overall, we have #{@i} great students".center(50)
   end
 end
 #nothing happes until we call the methods

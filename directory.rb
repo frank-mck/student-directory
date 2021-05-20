@@ -10,15 +10,15 @@ def input_students
     while true do
       cohort = gets.strip
       cohort = "november" if cohort.empty?
-      puts "You are adding #{name} to cohort #{cohort}, is this correct? Enter Y/N"
+      puts "You are adding #{name} to cohort #{cohort}, is this correct? Enter Y/N".center(50)
       confirm = gets.strip
         if confirm == "Y"
           cohort = cohort
           break
         elsif confirm == "N"
-          puts "Enter a cohort"
+          puts "Enter a cohort".center(50)
         else
-          puts "Enter Y/N"
+          puts "Enter Y/N".center(50)
         end
     end
       
@@ -41,13 +41,18 @@ def input_students
 end
 
 def cohorts(students)
-  cohort_list = {}
+  cohort_list = []
 
-  students.map { |student| cohort_list[student[:cohort]] = student[:name] }
-  cohort_list.map do |cohort| 
-    puts "cohort #{cohort.join("")}"
-  end
-
+  students.map.with_index do |cohort, i| 
+   if cohort_list[:cohort] == cohort[:cohort]
+      cohort_list.push(cohort[:name])
+   end
+    
+   end
+#   cohort_list.map do |cohort| 
+#     puts cohortq
+#   end
+puts cohort_list
 end
 
 def print_header

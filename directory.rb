@@ -4,46 +4,49 @@ def input_students
   puts "To finish, just hit enter 3 times".center(50)
   name = gets.strip
   
-  puts "Please enter students cohort".center(50)
-  cohort = gets.strip
-  cohort = "november" if cohort.empty?
+  while !name.empty? do
+    puts "Please enter students cohort".center(50)
   
+    while true do
+      cohort = gets.strip
+      cohort = "november" if cohort.empty?
+      puts "You are adding #{name} to cohort #{cohort}, is this correct? Enter Y/N"
+      confirm = gets.strip
+        if confirm == "Y"
+          cohort = cohort
+          break
+        elsif confirm == "N"
+          puts "Enter a cohort"
+        else
+          puts "Enter Y/N"
+        end
+    end
+      
   puts "Please enter students hobbies".center(50)
   hobbies = gets.strip
   
   puts "Please enter students country of birth".center(50)
   country_of_birth = gets.strip
-  
-  while !name.empty? do
-    students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
-   if students.length <= 1
-       puts "Now we have #{students.count} student".center(50)
-   else
-       puts "Now we have #{students.count} students".center(50)
-   end
-    name = gets.strip
+  students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
     
-    if !name.empty?
-      puts "Please enter students cohort".center(50)
-      cohort = gets.strip
-      puts "Please enter students hobbies".center(50)
-      hobbies = gets.strip
-      puts "Please enter students country of birth".center(50)
-      country_of_birth = gets.strip
+    if students.length <= 1
+      puts "Now we have #{students.count} student".center(50)
+    else
+      puts "Now we have #{students.count} students".center(50)
     end
+   
+    name = gets.strip
   end
   students
 end
 
 def cohorts(students)
-     cohort_list =  
-       {
-        "january" => [], "february": [], "march": [], "april": [], "june": [],
-       "july": [], "august": [], "september": [], "october": [], "november": [], "december": [] 
-       }
+  cohort_list = {}
 
-students.map { |student| cohort_list[student[:cohort]] = student[:name] }
-puts cohort_list
+  students.map { |student| cohort_list[student[:cohort]] = student[:name] }
+  cohort_list.map do |cohort| 
+    puts "cohort #{cohort.join("")}"
+  end
 
 end
 

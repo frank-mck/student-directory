@@ -40,9 +40,9 @@ def input_students
   students
 end
 
-def cohorts(students)
+def print_cohorts(students)
   cohort_list = [:january, :february, :march, :april, :june,
-    :july, :august, :september, :october, :november, :december]
+                 :july, :august, :september, :october, :november, :december]
   grouped_cohorts = Hash.new()
   
   students.each do |student|
@@ -108,9 +108,35 @@ def print_footer(names)
     puts "-------------".center(100)
   end
 end
+
+def interactive_menu
+  students = []
+  loop do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. exit"
+    selection = gets.chomp
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+      print_cohorts(students)
+    when "9"
+      exit
+    else
+        puts "I don't know what you mena, try again"
+    end
+  end
+end
+      
+      
 #nothing happes until we call the methods
-students = input_students
-print_header
-print(students)
-print_footer(students)
-cohorts(students)
+# students = input_students
+# print_header
+# print(students)
+# print_footer(students)
+# print_cohorts(students)
+interactive_menu

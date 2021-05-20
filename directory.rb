@@ -117,7 +117,18 @@ def print_menu
     puts "2. Show the students"
     puts "3. Show students by specfic letter"
     puts "4. Show students by cohort"
+    puts "5. Save the list to students.csv"
     puts "9. exit"
+end
+
+def save_students
+   file = File.open("students.csv", "w")
+   @students.each do |student|
+       student_data = [student[:name], student[:cohort]]
+       csv_line = student_data.join(",")
+       file.puts csv_line
+   end
+   file.close
 end
 
 def process(selection)
@@ -133,13 +144,15 @@ def process(selection)
       print_footer
       when "4"
       print_cohorts
+    when "5"
+        save_students
     when "9"
       exit
     else
         puts "I don't know what you mean, try again"
     end
 end
-
+    
 def interactive_menu
   loop do
     print_menu

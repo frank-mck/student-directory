@@ -60,9 +60,9 @@ def print_cohorts
     end
     @it = 0
     while @it <= 10 do
-      puts "All students in the #{@cohort_list[@it]} cohort: ".center(100)
+      puts "Students in #{@cohort_list[@it]} cohort: ".center(100)
       if @grouped_cohorts[@cohort_list[@it]] == nil
-          puts "~~~No students in this cohort~~~".center(100)
+          puts "0 students".center(100)
           puts " "
       else
       puts @grouped_cohorts[@cohort_list[@it]].join(", ").center(100)

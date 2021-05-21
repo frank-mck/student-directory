@@ -11,11 +11,9 @@ def input_students
     puts "Please enter students cohort month".center(100)
     while true do
       cohort = gets.strip
-      cohort = "november" if cohort.empty?
       puts "You are adding #{name} to cohort #{cohort}, is this correct? Enter Y/N".center(100)
       confirm = gets.strip
         if confirm == "Y"
-          cohort = cohort
           break
         elsif confirm == "N"
           puts "Enter a cohort".center(100)
@@ -30,7 +28,7 @@ def input_students
   puts "Please enter students country of birth".center(100)
   country_of_birth = gets.strip
   # add input to student array
-  @students << { name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
+  @students << { name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth }
     
   
   if @students.length <= 1 
@@ -42,26 +40,38 @@ def input_students
   name = gets.strip
   end
   # add a default value for cohort if invalid input or typo
-  @students = @students.each {|cohort| [cohort[:cohort]].include?([@cohort_list]) ? cohort[:cohort] : cohort[:cohort] = :november }
+  @students = @students.each {|cohort| @cohort_list.find_index(cohort[:cohort].to_sym) == nil ? cohort[:cohort] = :november : cohort[:cohort]}
   @students
 end
 
 def print_cohorts
-  grouped_cohorts = Hash.new()
+  @grouped_cohorts = Hash.new()
   
   @students.each do |student|
-    month = @cohort_list.find_index(student[:cohort])
+    month = @cohort_list.find_index(student[:cohort].to_sym)
     if @cohort_list[month] == student[:cohort]
       @cohort_month = student[:cohort]
-      if grouped_cohorts[@cohort_month] == nil
-        grouped_cohorts[@cohort_month] = []
+      if @grouped_cohorts[@cohort_month] == nil
+        @grouped_cohorts[@cohort_month] = []
       end
            
-      grouped_cohorts[@cohort_month].push(student[:name])
+      @grouped_cohorts[@cohort_month].push(student[:name])
     end
     end
-  puts "All students in the #{@cohort_month} cohort: ".center(100)
-  puts grouped_cohorts[@cohort_month].join("").center(100)
+    @it = 0
+    while @it <= 10 do
+      puts "All students in the #{@cohort_list[@it]} cohort: ".center(100)
+      if @grouped_cohorts[@cohort_list[@it]] == nil
+          puts "~~~No students in this cohort~~~".center(100)
+          puts " "
+      else
+      puts @grouped_cohorts[@cohort_list[@it]].join(", ").center(100)
+      puts " "
+  end
+      
+     
+      @it += 1
+    end
 end
 
 def print_header
@@ -84,26 +94,26 @@ end
 def print_by_letter
   @i = 0
     puts "Please enter a letter to see all students begining with that letter".center(100)
-    @letter = gets.chomp
+    @letter = gets.strip
+    filtered_students = @students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
  
-    @students.reject { |some| some[:name].chr != @letter || some[:name].length >= 12 }
-    puts "Showing all students that begin with the letter #{@letter}".center(100)
-    
-    @students.map do |initials|
+    filtered_students.map do |initials|
       if initials[:name].chr != @letter
         puts "No students found with the letter #{@letter}".center(100)
       else
-        until @i >= @students.length
-          student = @students[@i]
-          puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100)
-          @i += 1
-        end
+        puts "Showing all students that begin with the letter #{@letter}".center(100)
       end
-    end
+    
+      until @i >= filtered_students.length
+        student = filtered_students[@i]
+        puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100)
+        @i += 1
+      end
+      end
 end
 
 def print_footer
-  if @students.length <= 1
+  if @i <= 1
     puts "Overall, we have #{@i} great student".center(100)
     puts "-------------".center(100)
   else
@@ -117,18 +127,28 @@ def print_menu
     puts "2. Show the students"
     puts "3. Show students by specfic letter"
     puts "4. Show students by cohort"
-    puts "5. Save the list to students.csv"
+    puts "5. Save students"
+    puts "6. Load students"
     puts "9. exit"
 end
 
 def save_students
    file = File.open("students.csv", "w")
    @students.each do |student|
-       student_data = [student[:name], student[:cohort]]
+       student_data = [student[:name], student[:cohort], student[:hobbies], student[:country_of_birth]]
        csv_line = student_data.join(",")
        file.puts csv_line
    end
    file.close
+end
+
+def load_students
+    file = File.open("students.csv", "r")
+    file.readlines.each do |line|
+      name, cohort, hobbies, country_of_birth = line.chomp.split(",")
+      @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth }
+  end
+  file.close
 end
 
 def process(selection)
@@ -145,7 +165,9 @@ def process(selection)
       when "4"
       print_cohorts
     when "5"
-        save_students
+      save_students
+    when "6"
+      load_students
     when "9"
       exit
     else

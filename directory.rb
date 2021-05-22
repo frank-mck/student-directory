@@ -22,7 +22,7 @@ end
 def process(selection)
     case selection
     when "1"
-        input_students
+      input_students
     when "2"
       print_header
       print_
@@ -30,7 +30,7 @@ def process(selection)
     when "3"
       print_by_letter
       print_footer
-      when "4"
+    when "4"
       print_cohorts
     when "5"
       save_students
@@ -114,11 +114,8 @@ end
 def print_
   @i = 0
     @students.reject { |name| name[:name].length >= 12 }
-    until @i >= @students.length
-      group1 = @students[@i]
-      puts "#{@i + 1}. #{group1[:name]} (cohort: #{group1[:cohort]}, hobbies: #{group1[:hobbies]}, country: #{group1[:country_of_birth]})".center(100)
-      @i += 1
-    end
+    @students.each { |student| 
+    puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100); @i += 1 }
 end
 
 def print_by_letter
@@ -132,11 +129,8 @@ def print_by_letter
     else
       puts "Showing all students that begin with the letter #{@letter}".center(100)
     end
-    until @i >= filtered_students.length
-      student = filtered_students[@i]
-      puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100)
-      @i += 1
-    end
+    filtered_students.each {|student| 
+      puts "#{@i + 1}. #{student[:name]} (cohort: #{student[:cohort]}, hobbies: #{student[:hobbies]}, country: #{student[:country_of_birth]})".center(100); @i += 1 }
   end
 end
 

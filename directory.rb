@@ -20,27 +20,22 @@ def interactive_menu
 end
 
 def process(selection)
-    case selection
-    when "1"
-      input_students
-    when "2"
-      print_header
-      print_
-      print_footer
-    when "3"
-      print_by_letter
-      print_footer
-    when "4"
-      print_cohorts
-    when "5"
-      save_students
-    when "6"
-      load_students
-    when "9"
-      exit
-    else
-        puts "I don't know what you mean, try again"
-    end
+  case selection
+  when "1" then input_students
+  when "2"
+    print_header
+    print_
+    print_footer
+  when "3"
+    print_by_letter
+    print_footer
+  when "4" then print_cohorts
+  when "5" then save_students
+  when "6" then load_students
+  when "9" then exit
+  else
+    puts "I don't know what you mean, try again"
+  end
 end
                  
 def input_students
